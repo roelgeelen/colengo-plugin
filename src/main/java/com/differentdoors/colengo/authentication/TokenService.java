@@ -16,15 +16,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.Instant;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
-@Slf4j
 public class TokenService {
     @Value("${different_doors.colengo.url}")
     private String URL;
@@ -47,10 +45,7 @@ public class TokenService {
 
     public Token getRefreshedToken() {
         if (tokenCache == null || tokenCache.isExpired()) {
-            log.info("Token expired, fetching new token");
             tokenCache = refreshOAuthToken();
-        } else {
-            log.info("Token still valid for {} seconds", tokenCache.getExpiresIn());
         }
         return tokenCache;
     }
@@ -73,8 +68,11 @@ public class TokenService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+        Map<String, String> urlParams = new HashMap();
+        urlParams.put("path", "tokens/renewtokens");
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(this.URL);
         Token refreshedToken = simpleRestTemplate.postForObject(
-                URL + "/tokens/renewtokens",
+                builder.buildAndExpand(urlParams).toUri(),
                 request,
                 Token.class
         );

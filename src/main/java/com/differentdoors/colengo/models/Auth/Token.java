@@ -23,7 +23,7 @@ public class Token {
     @JsonProperty("AccessToken")
     private String accessToken;
     @JsonProperty("ExpiresIn")
-    private long expiresIn;
+    private Long expiresIn;
     @JsonIgnore
     private Instant obtained_at;
 
