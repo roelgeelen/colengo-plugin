@@ -37,8 +37,9 @@ public class UserAddressService {
             .build();
 
     @Retryable(value = ResourceAccessException.class, maxAttempts = 3, backoff = @Backoff(delay = 1000))
-    public Address getUserAddress(String userId, String addressId) {
+    public Address getUserAddress(String shopUrl, String userId, String addressId) {
         Map<String, String> urlParams = new HashMap<>();
+        urlParams.put("shop", shopUrl);
         urlParams.put("path", "shopusers/" + userId + "/shopuseraddresses/" + addressId);
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(URL);

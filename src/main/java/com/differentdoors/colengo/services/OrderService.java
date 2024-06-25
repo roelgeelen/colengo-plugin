@@ -14,9 +14,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -39,8 +38,9 @@ public class OrderService {
             .build();
 
     @Retryable(value = ResourceAccessException.class, maxAttempts = 3, backoff = @Backoff(delay = 1000))
-    public Order getOrderDetails(String id) {
+    public Order getOrderDetails(String shopUrl, String id) {
         Map<String, String> urlParams = new HashMap<>();
+        urlParams.put("shop", shopUrl);
         urlParams.put("path", "orders/" + id + "/details");
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(URL);
@@ -49,8 +49,9 @@ public class OrderService {
     }
 
     @Retryable(value = ResourceAccessException.class, maxAttempts = 3, backoff = @Backoff(delay = 1000))
-    public void updateOrderStatus(String id, int status) {
+    public void updateOrderStatus(String shopUrl, String id, int status) {
         Map<String, String> urlParams = new HashMap<>();
+        urlParams.put("shop", shopUrl);
         urlParams.put("path", "orders/" + id + "/updateorderstatus");
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(URL);
 

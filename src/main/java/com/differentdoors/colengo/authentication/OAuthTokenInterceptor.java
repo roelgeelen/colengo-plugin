@@ -19,7 +19,7 @@ public class OAuthTokenInterceptor implements ClientHttpRequestInterceptor {
     public ClientHttpResponse intercept(HttpRequest request, byte[] body,
                                         ClientHttpRequestExecution execution) throws IOException {
         request.getHeaders().setContentType(MediaType.APPLICATION_JSON);
-        request.getHeaders().add("Authorization", "PublicApi " + tokenService.getRefreshedToken().getAccessToken());
+        request.getHeaders().add("Authorization", "PublicApi " + tokenService.getRefreshedToken(request.getURI().getHost()).getAccessToken());
         return execution.execute(request, body);
     }
 }

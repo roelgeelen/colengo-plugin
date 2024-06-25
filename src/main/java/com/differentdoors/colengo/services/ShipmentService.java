@@ -3,6 +3,7 @@ package com.differentdoors.colengo.services;
 import com.differentdoors.colengo.models.CResults;
 import com.differentdoors.colengo.models.Objects.Order.Order;
 import com.differentdoors.colengo.models.Objects.Shipment;
+import com.differentdoors.colengo.models.Objects.ShipmentMethod;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -36,13 +37,25 @@ public class ShipmentService {
     private RestTemplate restTemplate;
 
     @Retryable(value = ResourceAccessException.class, maxAttempts = 3, backoff = @Backoff(delay = 1000))
-    public CResults<Shipment> getOrderShipmentList(String id) throws Exception {
+    public CResults<Shipment> getOrderShipmentList(String shopUrl, String id) throws Exception {
         Map<String, String> urlParams = new HashMap<>();
+        urlParams.put("shop", shopUrl);
         urlParams.put("path", "ordershipments/" + id + "/list");
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(URL);
 
         return objectMapper.readValue(restTemplate.getForObject(builder.buildAndExpand(urlParams).toUri(), String.class), new TypeReference<CResults<Shipment>>() {
         });
+    }
+
+    @Retryable(value = ResourceAccessException.class, maxAttempts = 3, backoff = @Backoff(delay = 1000))
+    public ShipmentMethod getShipmentMethod(String shopUrl, Integer id) throws Exception {
+        Map<String, String> urlParams = new HashMap<>();
+        urlParams.put("shop", shopUrl);
+        urlParams.put("path", "shipmentmethods/getanindividualshippingmethod/" + id);
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(URL).queryParam("language", "NL");
+
+        return objectMapper.readValue(restTemplate.getForObject(builder.buildAndExpand(urlParams).toUri(), String.class), ShipmentMethod.class);
     }
 }

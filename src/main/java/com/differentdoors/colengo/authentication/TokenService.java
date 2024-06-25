@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -27,11 +26,12 @@ public class TokenService {
     @Value("${different_doors.colengo.url}")
     private String URL;
 
-    @Autowired
-    private RefreshTokenRepository refreshTokenRepository;
-
+    private String SHOP = "";
     private final RestTemplate simpleRestTemplate;
     private Token tokenCache;
+
+    @Autowired
+    private RefreshTokenRepository refreshTokenRepository;
 
     private final ObjectMapper objectMapper = JsonMapper.builder()
             .findAndAddModules()
@@ -43,8 +43,9 @@ public class TokenService {
                 build();
     }
 
-    public Token getRefreshedToken() {
-        if (tokenCache == null || tokenCache.isExpired()) {
+    public Token getRefreshedToken(String url) {
+        if (!SHOP.equals(url) || tokenCache == null || tokenCache.isExpired()) {
+            SHOP = url;
             tokenCache = refreshOAuthToken();
         }
         return tokenCache;
@@ -69,8 +70,10 @@ public class TokenService {
             e.printStackTrace();
         }
         Map<String, String> urlParams = new HashMap();
+        urlParams.put("shop", SHOP);
         urlParams.put("path", "tokens/renewtokens");
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(this.URL);
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(URL);
+        String t = builder.buildAndExpand(urlParams).toUri().toString();
         Token refreshedToken = simpleRestTemplate.postForObject(
                 builder.buildAndExpand(urlParams).toUri(),
                 request,
@@ -83,12 +86,12 @@ public class TokenService {
     }
 
     private String getRefreshToken() {
-        Optional<RefreshToken> optionalRefreshToken = refreshTokenRepository.findByName("colengo");
+        Optional<RefreshToken> optionalRefreshToken = refreshTokenRepository.findByName(SHOP);
         return optionalRefreshToken.map(RefreshToken::getRefreshToken).orElse(null);
     }
 
     private void saveNewRefreshToken(Token token) {
-        Optional<RefreshToken> optionalRefreshToken = refreshTokenRepository.findByName("colengo");
+        Optional<RefreshToken> optionalRefreshToken = refreshTokenRepository.findByName(SHOP);
         if (optionalRefreshToken.isPresent()) {
             RefreshToken refreshToken = optionalRefreshToken.get();
             refreshToken.setRefreshToken(token.getRefreshToken());

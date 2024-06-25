@@ -1,6 +1,6 @@
 package com.differentdoors.colengo.services;
 
-import com.differentdoors.colengo.models.Objects.Product;
+import com.differentdoors.colengo.models.Objects.Quotation.Quotation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class ColengoProductService {
+public class ColengoQuotationService {
     @Value("${different_doors.colengo.url}")
     private String URL;
 
@@ -24,13 +24,13 @@ public class ColengoProductService {
     private RestTemplate restTemplate;
 
     @Retryable(value = ResourceAccessException.class, maxAttempts = 3, backoff = @Backoff(delay = 1000))
-    public Product getProductDetails(String shopUrl, String id) {
+    public Quotation getQuotationDetails(String shopUrl, String id) {
         Map<String, String> urlParams = new HashMap<>();
         urlParams.put("shop", shopUrl);
-        urlParams.put("path", "products/" + id + "/details");
+        urlParams.put("path", "quotations/" + id + "/details");
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(URL);
 
-        return restTemplate.getForObject(builder.buildAndExpand(urlParams).toUri(), Product.class);
+        return restTemplate.getForObject(builder.buildAndExpand(urlParams).toUri(), Quotation.class);
     }
 }

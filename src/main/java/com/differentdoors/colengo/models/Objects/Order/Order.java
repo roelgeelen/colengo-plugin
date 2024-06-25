@@ -23,8 +23,8 @@ public class Order {
     private String firstName;
     @JsonProperty("LastName")
     private String lastName;
-    @JsonProperty("OrderUserComment")
-    private String orderUserComment;
+    @JsonProperty("UserComment")
+    private String userComment;
 
 //    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Europe/Paris")
 //    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
