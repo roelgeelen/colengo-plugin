@@ -15,15 +15,10 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Order {
-    @JsonProperty("ProductId")
     private Integer productId;
-    @JsonProperty("ShopUserId")
     private Integer shopUserId;
-    @JsonProperty("FirstName")
     private String firstName;
-    @JsonProperty("LastName")
     private String lastName;
-    @JsonProperty("UserComment")
     private String userComment;
 
 //    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "Europe/Paris")
@@ -35,10 +30,7 @@ public class Order {
 //    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
 //    @JsonProperty("Modified")
 //    private Instant modified;
-    @JsonProperty("ShopUserAddressId")
     private Integer shopUserAddressId;
-    @JsonProperty("BillingAddressId")
     private Integer billingAddressId;
-    @JsonProperty("TotalPrice")
     private TotalPrice totalPrice;
 }

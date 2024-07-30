@@ -1,4 +1,4 @@
-package com.differentdoors.colengo.models.Objects.Order;
+package com.differentdoors.colengo.models.Objects.Quotation;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -14,10 +14,9 @@ import lombok.Setter;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TotalPrice {
+public class QuotationPrice {
+    @JsonProperty("Amount")
     private Double amount;
+    @JsonProperty("Currency")
     private String currency;
-    private String displayName;
-    private String sign;
-    private Boolean isDefault;
 }
