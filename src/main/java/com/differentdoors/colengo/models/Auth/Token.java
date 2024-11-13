@@ -18,8 +18,11 @@ import java.time.Instant;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Token {
+    @JsonProperty("RefreshToken")
     private String refreshToken;
+    @JsonProperty("AccessToken")
     private String accessToken;
+    @JsonProperty("ExpiresIn")
     private Long expiresIn;
     @JsonIgnore
     private Instant obtained_at;

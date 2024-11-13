@@ -15,7 +15,10 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ShipmentName {
-    private String Language;
+    @JsonProperty("Language")
+    private String language;
+    @JsonProperty("Value")
     private String value;
+    @JsonProperty("Description")
     private String description;
 }

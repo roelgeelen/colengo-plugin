@@ -15,6 +15,8 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ShipmentMethod {
+    @JsonProperty("ShipmentMethodId")
     private Integer shipmentMethodId;
+    @JsonProperty("ShipmentName")
     private ShipmentName shipmentName;
 }

@@ -15,9 +15,14 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TotalPrice {
+    @JsonProperty("Amount")
     private Double amount;
+    @JsonProperty("Currency")
     private String currency;
+    @JsonProperty("DisplayName")
     private String displayName;
+    @JsonProperty("Sign")
     private String sign;
+    @JsonProperty("IsDefault")
     private Boolean isDefault;
 }

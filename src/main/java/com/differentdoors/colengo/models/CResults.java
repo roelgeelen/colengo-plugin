@@ -17,8 +17,12 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CResults<T> {
+    @JsonProperty("TotalItems")
     private Integer totalItems;
+    @JsonProperty("CurrentPage")
     private Integer currentPage;
+    @JsonProperty("TotalPages")
     private Integer totalPages;
+    @JsonProperty("Items")
     private List<T> items;
 }
